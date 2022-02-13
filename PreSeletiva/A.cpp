@@ -3,6 +3,9 @@
 using namespace std;
 
 int main(){
+    ios::sync_with_stdio(0);
+    cin.tie(0); cout.tie(0);
+
     int t;
     cin >> t;
     while(t--){
@@ -29,34 +32,50 @@ int main(){
         }
 
         for(int i=n-1; i>=0; i--){
-            for(int j=0; j<m; j++){
+            for(int j = 0; j<m; j++){
                 if(table[i][j] != 0){
-                    table[i][j] = 2;
-                    if(table[i][j] == 1) blackNotVisited--;
-                    k--;
-                    if(i-1<0 || j-1<0) k++;
-                    else if(table[i-1][j-1] == 0) k++;
-                    else if(i-1<0  || j+1>=m) k++;
-                    else if(table[i-1][j+1] == 0) k++;
-
-                    int a = 1;
-                    bool flag = 1;
-                    while(i-a>=0 && flag && j-a>=0 && j+a<m){
-                        if(table[i-a][j-a] != 0 && table[i-a][j+a] != 0){
-                            if(table[i-a][j-a] == 1) blackNotVisited--;
-                             if(table[i-a][j+a] == 1) blackNotVisited--;
-                            table[i-a][j-a] = 2;
-                            table[i-a][j+a] = 2;
+                    int a = 0;
+                    int toReduce = 0;
+                    while(i-a>=0 && j+a<m && table[i-a][j+a]!=0 && table[i-a][j-a] !=0 && j-a >=0){
+                        if(table[i-a][j+a] == 1){
+                            table[i-a][j+a] = 3;
+                            toReduce++;
                         }
-                        else flag = false;
+                        if(table[i-a][j-a] == 1){
+                            table[i-a][j-a] = 3;
+                            toReduce++;
+                        }
 
                         a++;
+                    }
+
+                    a--;
+                    if(a>=k){
+                        blackNotVisited -= toReduce;
+                        a = 0;
+                         while(i-a>=0 && j+a<m && table[i-a][j+a]!=0 && table[i-a][j-a] !=0 && j-a >=0){
+                            if(table[i-a][j+a] == 3) table[i-a][j+a] = 2;
+
+                            if(table[i-a][j-a] == 3) table[i-a][j-a] = 2;
+
+                            a++;
+                        }
+                    }
+                    
+                    else{
+                        a = 0;
+                        while(i-a>=0 && j+a<m && table[i-a][j+a]!=0 && table[i-a][j-a] !=0 && j-a >=0){
+                            if(table[i-a][j+a] == 3) table[i-a][j+a] = 1;
+
+                            if(table[i-a][j-a] == 3) table[i-a][j-a] = 1;
+
+                            a++;
+                        }
                     }
                 }
             }
         }
-
-        if(valid == false || blackNotVisited>0 || k>0) cout << "NO\n";
+        if(blackNotVisited!=0) cout << "NO\n";
         else cout << "YES\n";
     }
 

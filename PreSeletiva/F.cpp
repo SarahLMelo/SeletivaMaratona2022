@@ -8,18 +8,12 @@ int main(){
 
     cin >> n;
     for(int i=0; i<n; i++){
-        double x, y;
         double a, b;
-        cin >> x >> y;
-
-        a = 12.0*(log2(x)-log2(440.0));
-        b = 12.0*(log2(y)-log2(440.0));
-
-        if(a-b < 0) ans+=(b-a);
-        else ans += (a-b);
+        cin >> a >> b;
+        ans += log2(b/a)*12.0;
     }
 
-    cout << round(ans) << "\n";
+    cout << abs(round(ans)) << "\n";
 
     return 0;
 }
