@@ -3,6 +3,9 @@
 using namespace std;
 
 int main(){
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+
     int t;
     stack <int> santasPile, minPile;
     string command;
@@ -14,7 +17,7 @@ int main(){
             int n;
             cin >> n;
             santasPile.push(n);
-            if(minPile.empty() || minPile.top() >= n) minPile.push(n); 
+            if(minPile.empty() || minPile.top() >= n) minPile.push(n);
 
         }
 
