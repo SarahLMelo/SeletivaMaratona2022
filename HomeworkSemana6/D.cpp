@@ -1,6 +1,7 @@
 #include <bits/stdc++.h>
 
 using namespace std;
+<<<<<<< Updated upstream
 
 int primesExp(int x){
     int ans = 0;
@@ -21,11 +22,26 @@ int primesExp(int x){
     return ans;
 }
 
+=======
+typedef long long ll;
+
+ll gcd(ll a, ll b){
+    while(b){
+        a %= b;
+        swap(a,b);
+    }
+
+    return a;
+}
+
+
+>>>>>>> Stashed changes
 int main(){
     int t;
     cin >> t;
 
     while(t--){
+<<<<<<< Updated upstream
         int a, b, n;
         cin >> a >> b >> n;
 
@@ -38,6 +54,9 @@ int main(){
         if(min <= n && max >= n && n!=1) cout << "YES\n";
         else if(min == 1 && n==1) cout << "YES\n";
         else cout << "NO\n";
+=======
+        
+>>>>>>> Stashed changes
     }
 
     return 0;
