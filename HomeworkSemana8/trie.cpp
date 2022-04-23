@@ -2,58 +2,93 @@
 
 using namespace std;
 
-#define alphabetSize 2
+typedef long long ll;
 
-class trieNode{
-    public:
-    trieNode *children[alphabetSize];
-    bool isEnd;
+ll base = 997;
+ll mod = 1e9+7;
 
-    trieNode(){
-        for(int i=0; i<alphabetSize; i++) children[i] = NULL;
-        isEnd = false;
-    }
-};
+vector <ll> potencias;
+vector <ll> has;
 
-class trie{
-    trieNode *root;
+void build(string &s){
+    potencias[0] = 1;
+    has[0] = s[0];
 
-    public:
-    trie(){
-        root = new trieNode();
+    for(int i = 1; i<s.size(); i++){
+        potencias[i] = (potencias[i-1] * base)%mod;
+        has[i] = ((has[i-1]*base) + s[i])%mod;
     }
 
-    void insert(string key){
-        trieNode *cur = root;
-        for(auto i:key){
-            int id = i - 'a';
+    return;
+}
 
-            if(!cur->children[id]){
-                cur->children[id] = new trieNode;
-            }
+void rk(string &s){
+    ll size = s.size();
+    potencias.resize(size + 1);
+    has.resize(size + 1);
 
-            cur = cur->children[id];
-        }
+    build(s);
+}
 
-        cur->isEnd = true;
+ll key(int l, int r){
+    ll ans = has[r];
+    if(l>0) ans = ((ans - potencias[r-l+1]*has[l-1]) % mod + mod) % mod;
+
+    return ans;
+}
+
+bool check(int size, string &s){
+    int ans = false;
+
+    for(int i=1; i+size<s.size()-1 && !ans; i++){
+        //cout << s.substr(0, size+1) << " " << s.substr(i, size+1) << endl;
+        if(key(0, size) == key(i, i+size)) ans = true;
     }
 
-    bool search(string key){
-        trieNode *cur = root;
-        
-        for(auto i:key){
-            int id = i - 'a';
+    //cout << ans << "\n";
 
-            if(!cur->children[id]) return false;
-
-            cur = cur->children[id];
-        }
-
-        return cur->isEnd;
-    }
-};
+    return ans;
+}
 
 int main(){
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+
+    string s;
+    cin >> s;
+
+    rk(s);
+
+    vector <int> matchSize;
+
+    for(int i=0; i<s.size(); i++){
+        if(key(0, i) == key(s.size()-1 - i, s.size()-1)) matchSize.push_back(i);
+        //else{
+            //cout << key(0, i) << " " << key(s.size()-1 - i, s.size()-1) << "\n";
+            //cout << s.substr(0, i+1) << " " << i << " " << s.substr(s.size()-1 - i, s.size()) << "\n" << endl;
+        //}
+    }
+
+    int l=0, r = matchSize.size();
+
+    //cout << matchSize.size() << "\n";
+
+    while(l<r){
+        int mid = (l+r)/2;
+
+        if(check(matchSize[mid], s)){
+            //cout << matchSize[mid] << " HERE\n";
+            l = mid+1;
+        }
+        else{
+            r = mid;
+        }
+    }
+
+    l--;
+
+    if(l==-1) cout << "Just a legend\n";
+    else cout << s.substr(0, matchSize[l]+1) << "\n";
 
     return 0;
 }
