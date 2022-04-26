@@ -25,7 +25,7 @@ int32_t main(){
     for(int i=2; i<=k; i++){
         for(int j=n-1; j>=0; j--){
             //cout << n << " " << j << endl;
-            if(n-j <= i) {
+            if(n-j < i) {
                 //cout << "HERE" << endl;
                 dp[i][j] = 0; //5 - 4 > 2 -> 1 > 2
             }
