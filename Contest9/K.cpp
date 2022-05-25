@@ -8,7 +8,7 @@ int dp(int pos, int parPos, vector <iv> &g, vector <int> &memo){
     for(auto i:g[pos].second){
         if(i == parPos) continue;
 
-        memo[pos] = max(memo[pos], g[pos].first + dp(i, pos, g, memo));
+        memo[pos] = max(memo[pos], g[pos].first*(1 + dp(i, pos, g, memo)));
     }
 
     return memo[pos];
@@ -19,7 +19,7 @@ void dfs(int pos, int parPos, int parAns, vector <iv> &g, vector <int> &memo, ve
 
     for(auto i:g[pos].second){
         if(i == parPos) continue;
-        int cur = g[pos].first + memo[i];
+        int cur = g[pos].first*(1 + memo[i]);
 
         if (max1 < cur) swap(max1, cur);
         if (max2 < cur) swap(max2, cur);
@@ -31,14 +31,14 @@ void dfs(int pos, int parPos, int parAns, vector <iv> &g, vector <int> &memo, ve
 
     for(auto i:g[pos].second){
         if(i == parPos) continue;
-        int cur = g[pos].first + memo[i];
+        int cur = g[pos].first*(1 + memo[i]);
 
         int maxUp, temp;
         if(max1 == cur) temp = max2;
         else temp = max1;
 
         maxUp = max(parAns, temp);
-        dfs(i, pos, g[pos].first + maxUp, g, memo, ans);
+        dfs(i, pos, g[pos].first*(1 + maxUp), g, memo, ans);
     }
 
     return;
@@ -79,6 +79,9 @@ int main(){
     dp(0, -1, g, memo);
 
     dfs(0, -1, 0, g, memo, ans);
+
+    for(auto i:ans) cout << i << " ";
+    cout << endl;
 
     cout << *max_element(ans.begin(), ans.end());
     cout << endl;

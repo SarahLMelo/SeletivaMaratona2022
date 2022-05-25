@@ -7,19 +7,31 @@ int main(){
     cin >> c >> n;
 
     while(c != 0){
-        vector <vector <int>> sobras(n);
-        for(int i=1; i<=n; i++){
+        vector <int> prefixModSum(n, 0);
+        for(int i=0; i<n; i++){
             int x;
             cin >> x;
 
-            sobras[x%c].push_back(i);
+            if(!i) prefixModSum[i] = x%c;
+            else prefixModSum[i] = (prefixModSum[i-1]+x)%c;
         }
 
-        bool nFound = true;
+        int l = 0, r = 1;
 
-        for(int i=2; i<=n; i++){
-
+        while(l<n){
+            if(l>1){
+                if(!((prefixModSum[r-1] - prefixModSum[l])%c)) break;
+                else{
+                 if(r < n && prefixModSum[r-1] - prefixModSum[l] <= c) r++;
+                 else l++;
+                }
+            }
         }
+
+        for(int i = l; i<r; i++){
+            cout << i << " ";
+        }
+        cout << endl;
 
         cin >> c >> n;
     }

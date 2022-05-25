@@ -2,37 +2,49 @@
 
 using namespace std;
 
+#define inf 1e9+5
 typedef pair<int, int> ii;
 
 int n, w;
-vector <ii> v;
-vector <int> dp;
+vector <vector <int>> memo;
+vector <ii> items;
+int bestAns;
 
-int bt(int value){
-    if(value >= n*1000) return 0;
+void dp(int pos, int value){
+    if(pos==n) return;
+    if(memo[pos][value] != inf) return;
 
-    int &ans = dp[value];
-    if(ans != -1) return ans;
+    //Taking
+    memo[pos+1][value+items[pos].second] = min(memo[pos+1][value+items[pos].second], memo[pos][value] + items[pos].first);
+    if(memo[pos+1][value+items[pos].second] <= w) bestAns = max(bestAns, value+items[pos].second);
+    if(memo[pos+1][value+items[pos].second] <= w) dp(pos+1, value+items[pos].second);    
 
-    int pega = 0, nPega = 0;
-    
+    //NotTaking
+    memo[pos+1][value] = min(memo[pos+1][value], memo[pos][value]);
+    if(memo[pos+1][value] <= w) dp(pos+1, value);
 
-    ans = max(pega, nPega);
-    
-    return ans;
+    return;
 }
 
 int main(){
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+
     cin >> n >> w;
-    dp.assign(n*1000, -1);
-    v.assign(n, {0, 0});
+    memo.assign(n+2, vector <int>(1e5 + 5, inf));
+    items.resize(n);
+    bestAns = 0;
+    memo[0][0] = 0;
 
     for(int i=0; i<n; i++){
-        int x, y;
-        cin >> v[i].first >> v[i].second;
+        int w, v;
+        cin >> w >> v;
+        items[i] = {w, v};
     }
 
-    cout << bt(0, w) << "\n";
+    dp(0, 0);
+
+    cout << bestAns << "\n";
 
     return 0;
 }
